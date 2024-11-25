@@ -41,18 +41,21 @@ with col1:
 
 with col2:
     st.write("### Record Audio")
+    st.markdown("Record audio using your microphone:")
     recording = mic_recorder(
         start_prompt="🎙️ Start Recording",
         stop_prompt="🛑 Stop Recording",
         just_once=False,
         use_container_width=False
     )
-    if recording["bytes"]:
+    if recording:
         st.session_state.audio_source = "record"
         st.session_state.audio_bytes = recording["bytes"]
         st.session_state.uploaded_audio = None
         st.audio(st.session_state.audio_bytes, format="audio/wav")
-
+    else:
+        st.session_state.audio_source = None
+        st.stop()
 # Ensure audio source selection is clear
 if not st.session_state.audio_bytes:
     st.warning("Please upload or record audio to proceed.")
